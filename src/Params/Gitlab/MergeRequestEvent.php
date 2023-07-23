@@ -19,7 +19,7 @@ class MergeRequestEvent
     {
         return new self(
             $data['object_kind'],
-            $data['object_type'],
+            $data['event_type'],
             User::fromJson($data['user']),
             Project::fromJson($data['project']),
             MergeRequest::fromJson($data['object_attributes']),
