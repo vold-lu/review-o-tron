@@ -2,7 +2,9 @@
 
 namespace App\Service\Listener;
 
+use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
+use App\Params\Gitlab\MergeRequest;
 use App\Service\MicrosoftTeamsConnector;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
@@ -16,35 +18,45 @@ class NotifyMergeRequestListener
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
         $this->teamsConnector->sendMessage(
-            sprintf('%s opened a new merge request', $event->user->name),
-            sprintf('On project %s', $event->project->name),
+            sprintf('%s opened MR "%s"', $event->user->name, $event->mergeRequest->title),
+            sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
-            $this->buildFacts($event),
-            $this->buildActions($event)
+            $this->buildFacts($event->assignees, $event->reviewers),
+            $this->buildActions($event->mergeRequest)
         );
     }
 
-    private function buildFacts(MergeRequestOpened $event): array
+    #[AsEventListener(event: MergeRequestMerged::class)]
+    public function onMergeRequestMerged(MergeRequestMerged $event): void
+    {
+        $this->teamsConnector->sendMessage(
+            sprintf('%s merged MR "%s"', $event->user->name, $event->mergeRequest->title),
+            sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
+            'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
+        );
+    }
+
+    private function buildFacts(array $assignees, array $reviewers): array
     {
         $facts = [];
 
-        if (count($event->assignees) > 0) {
+        if (count($assignees) > 0) {
             $facts[] = [
                 'name' => 'Assigned to',
-                'value' => $event->assignees[0]->name
+                'value' => $assignees[0]->name
             ];
         }
-        if (count($event->reviewers) > 0) {
+        if (count($reviewers) > 0) {
             $facts[] = [
                 'name' => 'Reviewer',
-                'value' => $event->reviewers[0]->name
+                'value' => $reviewers[0]->name
             ];
         }
 
         return $facts;
     }
 
-    private function buildActions(MergeRequestOpened $event): array
+    private function buildActions(MergeRequest $mergeRequest): array
     {
         return [
             [
@@ -53,7 +65,7 @@ class NotifyMergeRequestListener
                 'targets' => [
                     [
                         'os' => 'default',
-                        'uri' => $event->mergeRequest->url,
+                        'uri' => $mergeRequest->url,
                     ]
                 ]
             ]
