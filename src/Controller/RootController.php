@@ -15,13 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RootController extends AbstractController
 {
-    public function __construct(private readonly EventDispatcherInterface $eventDispatcher)
+    public function __construct(private readonly EventDispatcherInterface $eventDispatcher,
+                                private readonly string                   $gitlabSecretToken)
     {
     }
 
     #[Route('/', name: 'app_root')]
     public function index(Request $request): Response
     {
+        // Validate that request is legit
+        if ($request->headers->get('X-Gitlab-Token') !== $this->gitlabSecretToken) {
+            return new Response(null, Response::HTTP_UNAUTHORIZED);
+        }
+
         $data = $request->toArray();
 
         if (empty($data)) {
