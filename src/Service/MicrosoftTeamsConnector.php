@@ -2,15 +2,15 @@
 
 namespace App\Service;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
  * A Microsoft Teams connector used to abstract interaction with MS Teams.
  */
 class MicrosoftTeamsConnector
 {
-    public function __construct(private readonly string $webhookUrl)
+    public function __construct(private readonly string              $webhookUrl,
+                                private readonly HttpClientInterface $client)
     {
     }
 
@@ -38,9 +38,8 @@ class MicrosoftTeamsConnector
             'potentialAction' => $actions
         ];
 
-        $client = new Client();
-        $client->post($this->webhookUrl, [
-            RequestOptions::JSON => $message
+        $this->client->request('POST', $this->webhookUrl, [
+            'json' => $message
         ]);
     }
 }
