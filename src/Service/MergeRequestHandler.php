@@ -2,21 +2,11 @@
 
 namespace App\Service;
 
+use App\Params\Event\MergeRequestOpened;
+
 class MergeRequestHandler
 {
-    public function handleOpened()
-    {
-    }
-
-    public function handleCommented()
-    {
-    }
-
-    public function handleApproved()
-    {
-    }
-
-    public function handleClosed()
+    public function handleOpened(MergeRequestOpened $params)
     {
     }
 }
