@@ -21,6 +21,7 @@ class NotifyMergeRequestListener
             sprintf('%s opened MR "%s"', $event->user->name, $event->mergeRequest->title),
             sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
+            '#2980b9',
             $this->buildFacts($event->assignees, $event->reviewers),
             $this->buildActions($event->mergeRequest)
         );
@@ -33,6 +34,9 @@ class NotifyMergeRequestListener
             sprintf('%s merged MR "%s"', $event->user->name, $event->mergeRequest->title),
             sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
+            '#27ae60',
+            [],
+            $this->buildActions($event->mergeRequest)
         );
     }
 
@@ -61,7 +65,7 @@ class NotifyMergeRequestListener
         return [
             [
                 '@type' => 'OpenUri',
-                'name' => 'Add a comment',
+                'name' => 'View online',
                 'targets' => [
                     [
                         'os' => 'default',

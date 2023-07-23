@@ -18,6 +18,7 @@ class MicrosoftTeamsConnector
         string  $title,
         ?string $subtitle = null,
         ?string $imageUrl = null,
+        ?string $themeColor = null,
         array   $facts = [],
         array   $actions = []
     ): void
@@ -25,7 +26,7 @@ class MicrosoftTeamsConnector
         $message = [
             '@type' => '',
             '@context' => '',
-            'themeColor' => '',
+            'themeColor' => $themeColor,
             'summary' => $title,
             'sections' => [
                 [

@@ -26,6 +26,7 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
             'Aloïs Micard opened MR "Update requirements.txt"',
             'creekorful/demo-repository: (devel) -> (main)',
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
+            '#2980b9',
             [
                 [
                     'name' => 'Assigned to',
@@ -39,7 +40,7 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
             [
                 [
                     '@type' => 'OpenUri',
-                    'name' => 'Add a comment',
+                    'name' => 'View online',
                     'targets' => [
                         [
                             'os' => 'default',
@@ -75,8 +76,20 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
             'Aloïs Micard merged MR "Update requirements.txt"',
             'creekorful/demo-repository: (devel) -> (main)',
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
+            '#27ae60',
             [],
-            []
+            [
+                [
+                    '@type' => 'OpenUri',
+                    'name' => 'View online',
+                    'targets' => [
+                        [
+                            'os' => 'default',
+                            'uri' => 'https://gitlab.com/creekorful/demo-repository/-/merge_requests/1',
+                        ]
+                    ]
+                ]
+            ]
         );
 
         // Run actual test
