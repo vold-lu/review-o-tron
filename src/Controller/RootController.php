@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Params\Event\MergeRequestApproved;
+use App\Params\Event\MergeRequestClosed;
+use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,10 +31,21 @@ class RootController extends AbstractController
         $mergeRequestEvent = MergeRequestEvent::fromJson($data);
 
         // Handle webhook events
-        if ($mergeRequestEvent->object_attributes->action === 'open') {
-            $this->eventDispatcher->dispatch(
-                MergeRequestOpened::fromEvent($mergeRequestEvent)
-            );
+        switch ($mergeRequestEvent->object_attributes->action) {
+            case 'open':
+                $this->eventDispatcher->dispatch(MergeRequestOpened::fromEvent($mergeRequestEvent));
+                break;
+            case 'close':
+                $this->eventDispatcher->dispatch(MergeRequestClosed::fromEvent($mergeRequestEvent));
+                break;
+            case 'approved':
+                $this->eventDispatcher->dispatch(MergeRequestApproved::fromEvent($mergeRequestEvent));
+                break;
+            case 'merge':
+                $this->eventDispatcher->dispatch(MergeRequestMerged::fromEvent($mergeRequestEvent));
+                break;
+            default:
+                break;
         }
 
         return new Response();
