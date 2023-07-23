@@ -15,13 +15,12 @@ class NotifyMergeRequestListener
     #[AsEventListener(event: MergeRequestOpened::class)]
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
-        $facts = $this->buildFacts($event);
-
         $this->teamsConnector->sendMessage(
             sprintf('%s opened a new merge request', $event->user->name),
             sprintf('On project %s', $event->project->name),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
-            $facts
+            $this->buildFacts($event),
+            $this->buildActions($event)
         );
     }
 
@@ -43,5 +42,21 @@ class NotifyMergeRequestListener
         }
 
         return $facts;
+    }
+
+    private function buildActions(MergeRequestOpened $event): array
+    {
+        return [
+            [
+                '@type' => 'OpenUri',
+                'name' => 'Add a comment',
+                'targets' => [
+                    [
+                        'os' => 'default',
+                        'uri' => $event->mergeRequest->url,
+                    ]
+                ]
+            ]
+        ];
     }
 }
