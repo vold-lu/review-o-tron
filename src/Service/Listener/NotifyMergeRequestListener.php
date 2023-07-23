@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Listener;
 
 use App\Params\Event\MergeRequestOpened;
+use App\Service\MicrosoftTeamsConnector;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-/**
- * The merge request handler. It is where the core logic of the application is stored.
- */
-class MergeRequestHandler
+class NotifyMergeRequestListener
 {
     public function __construct(private readonly MicrosoftTeamsConnector $teamsConnector)
     {
     }
 
-    public function handleOpened(MergeRequestOpened $params): void
+    #[AsEventListener(event: MergeRequestOpened::class)]
+    public function onMergeRequestOpened(MergeRequestOpened $params): void
     {
         // Dispatch Microsoft Teams notification
         $facts = [];

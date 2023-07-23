@@ -4,15 +4,15 @@ namespace App\Controller;
 
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
-use App\Service\MergeRequestHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RootController extends AbstractController
 {
-    public function __construct(private readonly MergeRequestHandler $mergeRequestHandler)
+    public function __construct(private readonly EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -29,7 +29,7 @@ class RootController extends AbstractController
 
         // Handle webhook events
         if ($mergeRequestEvent->object_attributes->action === 'open') {
-            $this->mergeRequestHandler->handleOpened(
+            $this->eventDispatcher->dispatch(
                 MergeRequestOpened::fromEvent($mergeRequestEvent)
             );
         }
