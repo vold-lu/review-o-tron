@@ -31,3 +31,10 @@ services:
     App\Controller\RootController:
         arguments:
             $gitlabSecretToken: '%app.gitlab_secret_token%'
+
+    # Ignore NotFoundHttpException (404 not found) exception
+    Sentry\Integration\IgnoreErrorsIntegration:
+        arguments:
+            $options:
+                ignore_exceptions:
+                    - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
