@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class TagMergeRequestListener
 {
-    private function __construct(private readonly Client                  $gitlabClient,
+    public function __construct(private readonly Client                  $gitlabClient,
                                  private readonly GitlabProjectRepository $projectRepository)
     {
     }
@@ -19,8 +19,8 @@ class TagMergeRequestListener
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if ($gitlabProject->getGitlabLabelOpened() !== null) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->id, $gitlabProject->getGitlabLabelOpened());
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelOpened() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
         }
     }
 
@@ -28,13 +28,21 @@ class TagMergeRequestListener
     public function onMergeRequestApproved(MergeRequestApproved $event): void
     {
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if ($gitlabProject->getGitlabLabelApproved() !== null) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->id, $gitlabProject->getGitlabLabelApproved());
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelApproved() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelApproved());
         }
     }
 
+    /**
+     * Set merge request current label to given one.
+     *
+     * @param int $projectId the id of the gitlab project
+     * @param int $mergeRequestIid the id of the merge request
+     * @param string $label the label to apply
+     * @return void
+     */
     private function applyLabel(int $projectId, int $mergeRequestIid, string $label): void
     {
-        $this->gitlabClient->mergeRequests()->update($projectId, $mergeRequestIid, ['labels' => [$label]]);
+        $this->gitlabClient->mergeRequests()->update($projectId, $mergeRequestIid, ['labels' => $label]);
     }
 }

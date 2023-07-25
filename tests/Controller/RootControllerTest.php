@@ -90,7 +90,7 @@ class RootControllerTest extends WebTestCase
 
         $gitlabProject = new GitlabProject();
         $gitlabProject->setGitlabSecretToken('testtest');
-        $gitlabProjectRepositoryMock->expects($this->once())
+        $gitlabProjectRepositoryMock->expects($this->atLeastOnce())
             ->method('findByGitlabId')
             ->with(42518399)
             ->willReturn($gitlabProject);
