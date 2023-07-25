@@ -9,12 +9,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class MicrosoftTeamsConnector
 {
-    public function __construct(private readonly string              $webhookUrl,
-                                private readonly HttpClientInterface $client)
+    public function __construct(private readonly HttpClientInterface $client)
     {
     }
 
     public function sendMessage(
+        string  $webhookUrl,
         string  $title,
         ?string $subtitle = null,
         ?string $imageUrl = null,
@@ -39,7 +39,7 @@ class MicrosoftTeamsConnector
             'potentialAction' => $actions
         ];
 
-        $this->client->request('POST', $this->webhookUrl, [
+        $this->client->request('POST', $webhookUrl, [
             'json' => $message
         ]);
     }

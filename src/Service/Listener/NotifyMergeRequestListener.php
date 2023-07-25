@@ -5,12 +5,16 @@ namespace App\Service\Listener;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequest;
+use App\Params\Gitlab\Project;
+use App\Repository\GitlabProjectRepository;
 use App\Service\MicrosoftTeamsConnector;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class NotifyMergeRequestListener
 {
-    public function __construct(private readonly MicrosoftTeamsConnector $teamsConnector)
+    public function __construct(private readonly MicrosoftTeamsConnector $teamsConnector,
+                                private readonly GitlabProjectRepository $projectRepository,
+                                private readonly string                  $defaultTeamsWebhookUrl)
     {
     }
 
@@ -18,6 +22,7 @@ class NotifyMergeRequestListener
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
         $this->teamsConnector->sendMessage(
+            $this->getTeamsWebhookUrl($event->project),
             sprintf('%s opened MR "%s"', $event->user->name, $event->mergeRequest->title),
             sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
@@ -31,6 +36,7 @@ class NotifyMergeRequestListener
     public function onMergeRequestMerged(MergeRequestMerged $event): void
     {
         $this->teamsConnector->sendMessage(
+            $this->getTeamsWebhookUrl($event->project),
             sprintf('%s merged MR "%s"', $event->user->name, $event->mergeRequest->title),
             sprintf('%s: (%s) -> (%s)', $event->project->path_with_namespace, $event->mergeRequest->source_branch, $event->mergeRequest->target_branch),
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
@@ -74,5 +80,15 @@ class NotifyMergeRequestListener
                 ]
             ]
         ];
+    }
+
+    private function getTeamsWebhookUrl(Project $project): string
+    {
+        $gitlabProject = $this->projectRepository->findByGitlabId($project->id);
+        if ($gitlabProject === null) {
+            return $this->defaultTeamsWebhookUrl;
+        }
+
+        return $gitlabProject->getTeamsWebhookUrl() ?? $this->defaultTeamsWebhookUrl;
     }
 }

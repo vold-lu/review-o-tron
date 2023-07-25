@@ -24,9 +24,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Service\MicrosoftTeamsConnector:
+    App\Service\Listener\NotifyMergeRequestListener:
         arguments:
-            $webhookUrl: '%app.teams_webhook_url%'
+            $defaultTeamsWebhookUrl: '%app.teams_webhook_url%'
 
     App\Controller\RootController:
         arguments:
