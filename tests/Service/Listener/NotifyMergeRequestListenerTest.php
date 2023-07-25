@@ -5,24 +5,24 @@ namespace App\Tests\Service\Listener;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
+use App\Repository\GitlabProjectRepository;
 use App\Service\Listener\NotifyMergeRequestListener;
 use App\Service\MicrosoftTeamsConnector;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NotifyMergeRequestListenerTest extends KernelTestCase
 {
-    public function testOnMergeRequestOpened(): void
+    public function testOnMergeRequestOpenedDefaultTeamsUrl(): void
     {
         self::bootKernel();
 
         // Mock dependencies
-        $microsoftTeamConnectorMock = $this->getMockBuilder(MicrosoftTeamsConnector::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['sendMessage'])
-            ->getMock();
+        $microsoftTeamConnectorMock = $this->createMock(MicrosoftTeamsConnector::class);
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
 
         // Perform assertions
         $microsoftTeamConnectorMock->expects($this->once())->method('sendMessage')->with(
+            'https://default-teams.url',
             'Aloïs Micard opened MR "Update requirements.txt"',
             'creekorful/demo-repository: (devel) -> (main)',
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
@@ -52,7 +52,7 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
         );
 
         // Run actual test
-        $listener = new NotifyMergeRequestListener($microsoftTeamConnectorMock);
+        $listener = new NotifyMergeRequestListener($microsoftTeamConnectorMock, $gitlabProjectRepositoryMock, "https://default-teams.url");
 
         $json = file_get_contents("tests/Fixtures/new-merge-request.json");
 
@@ -61,18 +61,17 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
         );
     }
 
-    public function testOnMergeRequestMerged(): void
+    public function testOnMergeRequestMergedDefaultTeamsUrl(): void
     {
         self::bootKernel();
 
         // Mock dependencies
-        $microsoftTeamConnectorMock = $this->getMockBuilder(MicrosoftTeamsConnector::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['sendMessage'])
-            ->getMock();
+        $microsoftTeamConnectorMock = $this->createMock(MicrosoftTeamsConnector::class);
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
 
         // Perform assertions
         $microsoftTeamConnectorMock->expects($this->once())->method('sendMessage')->with(
+            'https://default-teams.url',
             'Aloïs Micard merged MR "Update requirements.txt"',
             'creekorful/demo-repository: (devel) -> (main)',
             'https://about.gitlab.com/images/press/logo/png/gitlab-logo-500.png',
@@ -93,7 +92,7 @@ class NotifyMergeRequestListenerTest extends KernelTestCase
         );
 
         // Run actual test
-        $listener = new NotifyMergeRequestListener($microsoftTeamConnectorMock);
+        $listener = new NotifyMergeRequestListener($microsoftTeamConnectorMock, $gitlabProjectRepositoryMock, "https://default-teams.url");
 
         $json = file_get_contents("tests/Fixtures/merged-merge-request.json");
 
