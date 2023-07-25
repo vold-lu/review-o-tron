@@ -1,0 +1,150 @@
+{
+  "object_kind": "merge_request",
+  "event_type": "merge_request",
+  "user": {
+    "id": 4204083,
+    "name": "Aloïs Micard",
+    "username": "creekorful",
+    "avatar_url": "https://gitlab.com/uploads/-/system/user/avatar/4204083/avatar.png",
+    "email": "alois@micard.lu"
+  },
+  "project": {
+    "id": 42518399,
+    "name": "Demo Repository",
+    "description": null,
+    "web_url": "https://gitlab.com/creekorful/demo-repository",
+    "avatar_url": null,
+    "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+    "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+    "namespace": "Aloïs Micard",
+    "visibility_level": 0,
+    "path_with_namespace": "creekorful/demo-repository",
+    "default_branch": "main",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.com/creekorful/demo-repository",
+    "url": "git@gitlab.com:creekorful/demo-repository.git",
+    "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+    "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+  },
+  "object_attributes": {
+    "assignee_id": 4204083,
+    "author_id": 4204083,
+    "created_at": "2023-07-03 16:33:57 UTC",
+    "description": "",
+    "head_pipeline_id": null,
+    "id": 234314221,
+    "iid": 1,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "preparing",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "devel",
+    "source_project_id": 42518399,
+    "state_id": 1,
+    "target_branch": "main",
+    "target_project_id": 42518399,
+    "time_estimate": 0,
+    "title": "Update requirements.txt",
+    "updated_at": "2023-07-03 16:33:57 UTC",
+    "updated_by_id": null,
+    "url": "https://gitlab.com/creekorful/demo-repository/-/merge_requests/1",
+    "source": {
+      "id": 42518399,
+      "name": "Demo Repository",
+      "description": null,
+      "web_url": "https://gitlab.com/creekorful/demo-repository",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+      "namespace": "Aloïs Micard",
+      "visibility_level": 0,
+      "path_with_namespace": "creekorful/demo-repository",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/creekorful/demo-repository",
+      "url": "git@gitlab.com:creekorful/demo-repository.git",
+      "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+    },
+    "target": {
+      "id": 42518399,
+      "name": "Demo Repository",
+      "description": null,
+      "web_url": "https://gitlab.com/creekorful/demo-repository",
+      "avatar_url": null,
+      "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+      "namespace": "Aloïs Micard",
+      "visibility_level": 0,
+      "path_with_namespace": "creekorful/demo-repository",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/creekorful/demo-repository",
+      "url": "git@gitlab.com:creekorful/demo-repository.git",
+      "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+    },
+    "last_commit": {
+      "id": "69fee581454b01a6d330dc0d4068ceb5cbd7481c",
+      "message": "Update requirements.txt\n",
+      "title": "Update requirements.txt",
+      "timestamp": "2023-07-03T18:33:38+02:00",
+      "url": "https://gitlab.com/creekorful/demo-repository/-/commit/69fee581454b01a6d330dc0d4068ceb5cbd7481c",
+      "author": {
+        "name": "Aloïs Micard",
+        "email": "a.micard@vold.lu"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+      4204083
+    ],
+    "reviewer_ids": [
+      4204083
+    ],
+    "labels": [],
+    "state": "opened",
+    "blocking_discussions_resolved": true,
+    "first_contribution": true,
+    "detailed_merge_status": "mergeable",
+    "action": "close"
+  },
+  "labels": [],
+  "changes": {},
+  "repository": {
+    "name": "Demo Repository",
+    "url": "git@gitlab.com:creekorful/demo-repository.git",
+    "description": null,
+    "homepage": "https://gitlab.com/creekorful/demo-repository"
+  },
+  "assignees": [
+    {
+      "id": 4204083,
+      "name": "Aloïs Micard",
+      "username": "creekorful",
+      "avatar_url": "https://gitlab.com/uploads/-/system/user/avatar/4204083/avatar.png",
+      "email": "alois@micard.lu"
+    }
+  ],
+  "reviewers": [
+    {
+      "id": 4204083,
+      "name": "Aloïs Micard",
+      "username": "creekorful",
+      "avatar_url": "https://gitlab.com/uploads/-/system/user/avatar/4204083/avatar.png",
+      "email": "alois@micard.lu"
+    }
+  ]
+}

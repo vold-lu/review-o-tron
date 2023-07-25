@@ -3,6 +3,7 @@
 namespace App\Service\Listener;
 
 use App\Params\Event\MergeRequestApproved;
+use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Repository\GitlabProjectRepository;
@@ -40,6 +41,15 @@ class TagMergeRequestListener
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
         if ($gitlabProject !== null && $gitlabProject->getGitlabLabelApproved() !== null) {
             $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelApproved());
+        }
+    }
+
+    #[AsEventListener(event: MergeRequestClosed::class)]
+    public function onMergeRequestClosed(MergeRequestClosed $event): void
+    {
+        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelUnapproved());
         }
     }
 
