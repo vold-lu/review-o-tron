@@ -1,0 +1,237 @@
+{
+  "object_kind": "note",
+  "event_type": "note",
+  "user": {
+    "id": 4204083,
+    "name": "Aloïs Micard",
+    "username": "creekorful",
+    "avatar_url": "https://gitlab.com/uploads/-/system/user/avatar/4204083/avatar.png",
+    "email": "alois@micard.lu"
+  },
+  "project_id": 42518399,
+  "project": {
+    "id": 42518399,
+    "name": "Demo Repository",
+    "description": null,
+    "web_url": "https://gitlab.com/creekorful/demo-repository",
+    "avatar_url": "https://gitlab.com/uploads/-/system/project/avatar/42518399/ic_launcher.png",
+    "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+    "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+    "namespace": "Dolibarr Team",
+    "visibility_level": 0,
+    "path_with_namespace": "creekorful/demo-repository",
+    "default_branch": "main",
+    "ci_config_path": "",
+    "homepage": "https://gitlab.com/creekorful/demo-repository",
+    "url": "git@gitlab.com:creekorful/demo-repository.git",
+    "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+    "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+  },
+  "object_attributes": {
+    "attachment": null,
+    "author_id": 4204083,
+    "change_position": {
+      "base_sha": null,
+      "start_sha": null,
+      "head_sha": null,
+      "old_path": null,
+      "new_path": null,
+      "position_type": "text",
+      "old_line": null,
+      "new_line": null,
+      "line_range": null
+    },
+    "commit_id": null,
+    "created_at": "2023-07-25 18:29:44 UTC",
+    "discussion_id": "7556188e4bef2d5a968bbec616b1dea3d42750a8",
+    "id": 1487710727,
+    "line_code": "0acb8682d15e01095483ce2e16003bfa1044a734_36_50",
+    "note": "RM",
+    "noteable_id": 239295930,
+    "noteable_type": "MergeRequest",
+    "original_position": {
+      "base_sha": "309c6a1f2a8d06fff48e20fb1d4859605829cf1c",
+      "start_sha": "309c6a1f2a8d06fff48e20fb1d4859605829cf1c",
+      "head_sha": "e753273d41eb133b0dc76245ef189f9fa4a9a697",
+      "old_path": "src/ui/modals/MailToContactModal.jsx",
+      "new_path": "src/ui/modals/MailToContactModal.jsx",
+      "position_type": "text",
+      "old_line": null,
+      "new_line": 50,
+      "line_range": {
+        "start": {
+          "line_code": "0acb8682d15e01095483ce2e16003bfa1044a734_36_44",
+          "type": "new",
+          "old_line": null,
+          "new_line": 44
+        },
+        "end": {
+          "line_code": "0acb8682d15e01095483ce2e16003bfa1044a734_36_50",
+          "type": "new",
+          "old_line": null,
+          "new_line": 50
+        }
+      }
+    },
+    "position": {
+      "base_sha": "309c6a1f2a8d06fff48e20fb1d4859605829cf1c",
+      "start_sha": "309c6a1f2a8d06fff48e20fb1d4859605829cf1c",
+      "head_sha": "a0bc0de240175693030fbb1bb8cf7980fec41699",
+      "old_path": "src/ui/modals/MailToContactModal.jsx",
+      "new_path": "src/ui/modals/MailToContactModal.jsx",
+      "position_type": "text",
+      "old_line": null,
+      "new_line": 50,
+      "line_range": {
+        "start": {
+          "line_code": "0acb8682d15e01095483ce2e16003bfa1044a734_36_44",
+          "type": "new",
+          "old_line": null,
+          "new_line": 44
+        },
+        "end": {
+          "line_code": "0acb8682d15e01095483ce2e16003bfa1044a734_36_50",
+          "type": "new",
+          "old_line": null,
+          "new_line": 50
+        }
+      }
+    },
+    "project_id": 42518399,
+    "resolved_at": null,
+    "resolved_by_id": null,
+    "resolved_by_push": null,
+    "st_diff": null,
+    "system": false,
+    "type": "DiffNote",
+    "updated_at": "2023-07-25 18:29:44 UTC",
+    "updated_by_id": null,
+    "description": "RM",
+    "url": "https://gitlab.com/creekorful/demo-repository/-/merge_requests/209#note_1487710727"
+  },
+  "repository": {
+    "name": "Demo Repository",
+    "url": "git@gitlab.com:creekorful/demo-repository.git",
+    "description": null,
+    "homepage": "https://gitlab.com/creekorful/demo-repository"
+  },
+  "merge_request": {
+    "assignee_id": 4204083,
+    "author_id": 9246449,
+    "created_at": "2023-07-25 15:35:07 UTC",
+    "description": "![image](https://gitlab.com/creekorful/demo-repository/uploads/a6ebdbe9f825725ad512720c2eab4c63/image.png)",
+    "head_pipeline_id": 944979302,
+    "id": 239295930,
+    "iid": 209,
+    "last_edited_at": null,
+    "last_edited_by_id": null,
+    "merge_commit_sha": null,
+    "merge_error": null,
+    "merge_params": {
+      "force_remove_source_branch": "1"
+    },
+    "merge_status": "can_be_merged",
+    "merge_user_id": null,
+    "merge_when_pipeline_succeeds": false,
+    "milestone_id": null,
+    "source_branch": "HCE-507",
+    "source_project_id": 42518399,
+    "state_id": 1,
+    "target_branch": "main",
+    "target_project_id": 42518399,
+    "time_estimate": 0,
+    "title": "Can edit contact",
+    "updated_at": "2023-07-25 18:29:43 UTC",
+    "updated_by_id": null,
+    "url": "https://gitlab.com/creekorful/demo-repository/-/merge_requests/209",
+    "source": {
+      "id": 42518399,
+      "name": "Demo Repository",
+      "description": null,
+      "web_url": "https://gitlab.com/creekorful/demo-repository",
+      "avatar_url": "https://gitlab.com/uploads/-/system/project/avatar/42518399/ic_launcher.png",
+      "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+      "namespace": "Dolibarr Team",
+      "visibility_level": 0,
+      "path_with_namespace": "creekorful/demo-repository",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/creekorful/demo-repository",
+      "url": "git@gitlab.com:creekorful/demo-repository.git",
+      "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+    },
+    "target": {
+      "id": 42518399,
+      "name": "Demo Repository",
+      "description": null,
+      "web_url": "https://gitlab.com/creekorful/demo-repository",
+      "avatar_url": "https://gitlab.com/uploads/-/system/project/avatar/42518399/ic_launcher.png",
+      "git_ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "git_http_url": "https://gitlab.com/creekorful/demo-repository.git",
+      "namespace": "Dolibarr Team",
+      "visibility_level": 0,
+      "path_with_namespace": "creekorful/demo-repository",
+      "default_branch": "main",
+      "ci_config_path": "",
+      "homepage": "https://gitlab.com/creekorful/demo-repository",
+      "url": "git@gitlab.com:creekorful/demo-repository.git",
+      "ssh_url": "git@gitlab.com:creekorful/demo-repository.git",
+      "http_url": "https://gitlab.com/creekorful/demo-repository.git"
+    },
+    "last_commit": {
+      "id": "a0bc0de240175693030fbb1bb8cf7980fec41699",
+      "message": "fix\n",
+      "title": "fix",
+      "timestamp": "2023-07-25T17:39:06+02:00",
+      "url": "https://gitlab.com/creekorful/demo-repository/-/commit/a0bc0de240175693030fbb1bb8cf7980fec41699",
+      "author": {
+        "name": "Aloïs Micard",
+        "email": "alois@micard.lu"
+      }
+    },
+    "work_in_progress": false,
+    "total_time_spent": 0,
+    "time_change": 0,
+    "human_total_time_spent": null,
+    "human_time_change": null,
+    "human_time_estimate": null,
+    "assignee_ids": [
+      4204083
+    ],
+    "reviewer_ids": [
+      2478301
+    ],
+    "labels": [
+      {
+        "id": 30363789,
+        "title": "Size|M",
+        "color": "#6699cc",
+        "project_id": 42518399,
+        "created_at": "2023-05-22 17:15:30 UTC",
+        "updated_at": "2023-05-22 17:15:30 UTC",
+        "template": false,
+        "description": "",
+        "type": "ProjectLabel",
+        "group_id": null
+      },
+      {
+        "id": 30363795,
+        "title": "Status|Ready-For-Review",
+        "color": "#8fbc8f",
+        "project_id": 42518399,
+        "created_at": "2023-05-22 17:15:32 UTC",
+        "updated_at": "2023-05-22 17:15:32 UTC",
+        "template": false,
+        "description": "",
+        "type": "ProjectLabel",
+        "group_id": null
+      }
+    ],
+    "state": "opened",
+    "blocking_discussions_resolved": false,
+    "first_contribution": false,
+    "detailed_merge_status": "discussions_not_resolved"
+  }
+}

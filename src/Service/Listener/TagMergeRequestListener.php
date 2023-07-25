@@ -6,6 +6,7 @@ use App\Params\Event\MergeRequestApproved;
 use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
+use App\Params\Event\MergeRequestRejected;
 use App\Repository\GitlabProjectRepository;
 use Gitlab\Client;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -46,6 +47,15 @@ class TagMergeRequestListener
 
     #[AsEventListener(event: MergeRequestClosed::class)]
     public function onMergeRequestClosed(MergeRequestClosed $event): void
+    {
+        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelUnapproved());
+        }
+    }
+
+    #[AsEventListener(event: MergeRequestRejected::class)]
+    public function onMergeRequestRejected(MergeRequestRejected $event): void
     {
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
         if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
