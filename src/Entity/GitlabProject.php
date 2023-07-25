@@ -22,6 +22,12 @@ class GitlabProject
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $gitlab_secret_token = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_opened = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_approved = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +65,30 @@ class GitlabProject
     public function setGitlabSecretToken(?string $gitlab_secret_token): static
     {
         $this->gitlab_secret_token = $gitlab_secret_token;
+
+        return $this;
+    }
+
+    public function getGitlabLabelOpened(): ?string
+    {
+        return $this->gitlab_label_opened;
+    }
+
+    public function setGitlabLabelOpened(?string $gitlab_label_opened): static
+    {
+        $this->gitlab_label_opened = $gitlab_label_opened;
+
+        return $this;
+    }
+
+    public function getGitlabLabelApproved(): ?string
+    {
+        return $this->gitlab_label_approved;
+    }
+
+    public function setGitlabLabelApproved(?string $gitlab_label_approved): static
+    {
+        $this->gitlab_label_approved = $gitlab_label_approved;
 
         return $this;
     }

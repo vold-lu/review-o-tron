@@ -143,5 +143,8 @@
             "config/packages/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "zeichen32/gitlabapibundle": {
+        "version": "v6.0.2"
     }
 }
