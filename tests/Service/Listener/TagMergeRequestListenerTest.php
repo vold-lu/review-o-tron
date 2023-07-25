@@ -4,6 +4,7 @@ namespace App\Tests\Service\Listener;
 
 use App\Entity\GitlabProject;
 use App\Params\Event\MergeRequestApproved;
+use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Repository\GitlabProjectRepository;
@@ -183,6 +184,92 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         $listener->onMergeRequestApproved(
             MergeRequestApproved::fromEvent(MergeRequestEvent::fromJson(json_decode($json, true)))
+        );
+    }
+
+    public function testMergeRequestMergedNoRule()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn(null);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = file_get_contents("tests/Fixtures/merged-merge-request.json");
+
+        $listener->onMergeRequestMerged(
+            MergeRequestMerged::fromEvent(MergeRequestEvent::fromJson(json_decode($json, true)))
+        );
+    }
+
+    public function testMergeRequestMergedWithEmptyRule()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProject = new GitlabProject();
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = file_get_contents("tests/Fixtures/merged-merge-request.json");
+
+        $listener->onMergeRequestMerged(
+            MergeRequestMerged::fromEvent(MergeRequestEvent::fromJson(json_decode($json, true)))
+        );
+    }
+
+    public function testMergeRequestMergedWithRule()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+        $gitlabClientMock->expects($this->once())
+            ->method('mergeRequests')
+            ->willReturn($mergeRequestsMock);
+
+        $mergeRequestsMock->expects($this->once())->method('update')->with(
+            42518399, 1, ['labels' => 'Approved'],
+        );
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelApproved('Approved');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = file_get_contents("tests/Fixtures/merged-merge-request.json");
+
+        $listener->onMergeRequestMerged(
+            MergeRequestMerged::fromEvent(MergeRequestEvent::fromJson(json_decode($json, true)))
         );
     }
 }
