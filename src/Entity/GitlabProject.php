@@ -13,7 +13,7 @@ class GitlabProject
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(unique: true)]
     private ?int $gitlab_id = null;
 
     #[ORM\Column(length: 255, nullable: true)]

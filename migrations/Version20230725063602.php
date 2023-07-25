@@ -21,6 +21,7 @@ final class Version20230725063602 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE gitlab_project (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, gitlab_id INTEGER NOT NULL, teams_webhook_url VARCHAR(255) DEFAULT NULL, gitlab_secret_token VARCHAR(255) DEFAULT NULL)');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_BE261A7ADAC3051D ON gitlab_project (gitlab_id)');
     }
 
     public function down(Schema $schema): void
