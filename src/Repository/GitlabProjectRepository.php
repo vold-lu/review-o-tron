@@ -33,4 +33,12 @@ class GitlabProjectRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function save(GitlabProject $project): GitlabProject
+    {
+        $this->getEntityManager()->persist($project);
+        $this->getEntityManager()->flush();
+
+        return $project;
+    }
 }
