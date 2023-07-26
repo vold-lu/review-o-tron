@@ -7,6 +7,7 @@ use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Event\MergeRequestRejected;
+use App\Params\Event\MergeRequestUpdated;
 use App\Params\Gitlab\MergeRequestAction;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Params\Gitlab\NoteEvent;
@@ -67,6 +68,7 @@ class RootController extends AbstractController
             MergeRequestAction::CLOSE => MergeRequestClosed::fromEvent($mergeRequestEvent),
             MergeRequestAction::APPROVED => MergeRequestApproved::fromEvent($mergeRequestEvent),
             MergeRequestAction::MERGE => MergeRequestMerged::fromEvent($mergeRequestEvent),
+            MergeRequestAction::UPDATE => MergeRequestUpdated::fromEvent($mergeRequestEvent),
             default => null,
         };
 
@@ -82,8 +84,6 @@ class RootController extends AbstractController
             $this->eventDispatcher->dispatch(MergeRequestRejected::fromEvent($noteEvent));
         }
     }
-
-    // TODO: handle PR being updated and all comment being resolved PR would be ready for review.
 
     private function getExpectedGitlabSecretToken(Project $project): string
     {

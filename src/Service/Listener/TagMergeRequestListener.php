@@ -7,6 +7,7 @@ use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Event\MergeRequestRejected;
+use App\Params\Event\MergeRequestUpdated;
 use App\Repository\GitlabProjectRepository;
 use Gitlab\Client;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -60,6 +61,31 @@ class TagMergeRequestListener
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
         if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
             $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelUnapproved());
+        }
+    }
+
+    #[AsEventListener(event: MergeRequestUpdated::class)]
+    public function onMergeRequestUpdated(MergeRequestUpdated $event): void
+    {
+        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
+        if ($gitlabProject === null) {
+            return;
+        }
+
+        $unapprovedLabel = $gitlabProject->getGitlabLabelUnapproved();
+        if ($unapprovedLabel === null) {
+            return;
+        }
+
+        $openedLabel = $gitlabProject->getGitlabLabelOpened();
+        if ($openedLabel === null) {
+            return;
+        }
+
+        // Make sure PR contains unapproved label but comments are resolved now
+        $mergeRequestLabels = array_map(fn ($label) => $label['title'], $event->mergeRequest->labels);
+        if (in_array($unapprovedLabel, $mergeRequestLabels) && $event->mergeRequest->blocking_discussions_resolved) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $openedLabel);
         }
     }
 
