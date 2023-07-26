@@ -41,4 +41,10 @@ class GitlabProjectRepository extends ServiceEntityRepository
 
         return $project;
     }
+
+    public function delete(GitlabProject $project): void
+    {
+        $this->getEntityManager()->remove($project);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:list-repo',
-    description: 'Add a short description for your command',
+    description: 'List configured Gitlab repository',
 )]
 class ListRepoCommand extends Command
 {
