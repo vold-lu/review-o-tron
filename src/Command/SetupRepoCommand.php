@@ -56,6 +56,7 @@ class SetupRepoCommand extends Command
         // Display confirmation
         $io->horizontalTable(
             [
+                'Gitlab ID',
                 'MS Teams Webhook URL',
                 'Opened MR label',
                 'Approved MR label',
@@ -63,6 +64,7 @@ class SetupRepoCommand extends Command
             ],
             [
                 [
+                    $gitlabProject->getGitlabId(),
                     $gitlabProject->getTeamsWebhookUrl(),
                     $gitlabProject->getGitlabLabelOpened(),
                     $gitlabProject->getGitlabLabelApproved(),
