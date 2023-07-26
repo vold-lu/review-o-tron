@@ -72,20 +72,8 @@ class TagMergeRequestListener
             return;
         }
 
-        $rejectedLabel = $gitlabProject->getGitlabLabelRejected();
-        if ($rejectedLabel === null) {
-            return;
-        }
-
-        $openedLabel = $gitlabProject->getGitlabLabelOpened();
-        if ($openedLabel === null) {
-            return;
-        }
-
-        // Make sure PR contains rejected label but comments are resolved now
-        $mergeRequestLabels = array_map(fn ($label) => $label['title'], $event->mergeRequest->labels);
-        if (in_array($rejectedLabel, $mergeRequestLabels) && $event->mergeRequest->blocking_discussions_resolved) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $openedLabel);
+        if ($event->mergeRequest->blocking_discussions_resolved && $gitlabProject->getGitlabLabelOpened()) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
         }
     }
 

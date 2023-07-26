@@ -507,8 +507,15 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         // Mock dependencies
         $gitlabClientMock = $this->createMock(Client::class);
-        $gitlabClientMock->expects($this->never())
-            ->method('mergeRequests');
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+
+        $gitlabClientMock->expects($this->once())
+            ->method('mergeRequests')
+            ->willReturn($mergeRequestsMock);
+
+        $mergeRequestsMock->expects($this->once())->method('update')->with(
+            42518399, 1, ['labels' => 'Ready-For-Review'],
+        );
 
         $gitlabProject = new GitlabProject();
         $gitlabProject->setGitlabLabelRejected('Unapproved');
@@ -569,6 +576,36 @@ class TagMergeRequestListenerTest extends KernelTestCase
                 'title' => 'Unapproved'
             ]
         ];
+
+        $listener->onMergeRequestUpdated(
+            MergeRequestUpdated::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
+    public function testMergeRequestUpdatedWithRuleConflictsNotResolved()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelRejected('Unapproved');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['blocking_discussions_resolved'] = false;
 
         $listener->onMergeRequestUpdated(
             MergeRequestUpdated::fromEvent(MergeRequestEvent::fromJson($json))
