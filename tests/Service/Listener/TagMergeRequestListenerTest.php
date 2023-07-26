@@ -87,7 +87,9 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -173,7 +175,9 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelApproved('Approved');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -259,7 +263,9 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelApproved('Approved');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -341,11 +347,13 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ->willReturn($mergeRequestsMock);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(
-            42518399, 1, ['labels' => 'Unapproved'],
+            42518399, 1, ['labels' => 'Rejected'],
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelRejected('Unapproved');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -427,11 +435,13 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ->willReturn($mergeRequestsMock);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(
-            42518399, 209, ['labels' => 'Unapproved'],
+            42518399, 209, ['labels' => 'Rejected'],
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelRejected('Unapproved');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -507,19 +517,14 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         // Mock dependencies
         $gitlabClientMock = $this->createMock(Client::class);
-        $mergeRequestsMock = $this->createMock(MergeRequests::class);
 
-        $gitlabClientMock->expects($this->once())
-            ->method('mergeRequests')
-            ->willReturn($mergeRequestsMock);
-
-        $mergeRequestsMock->expects($this->once())->method('update')->with(
-            42518399, 1, ['labels' => 'Ready-For-Review'],
-        );
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelRejected('Unapproved');
-        $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -558,8 +563,9 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelRejected('Unapproved');
-        $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -573,7 +579,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
         $json['object_attributes']['labels'] = [
             [
-                'title' => 'Unapproved'
+                'title' => 'Rejected'
             ]
         ];
 
@@ -592,8 +598,9 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ->method('mergeRequests');
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelRejected('Unapproved');
-        $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -606,6 +613,41 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
         $json['object_attributes']['blocking_discussions_resolved'] = false;
+
+        $listener->onMergeRequestUpdated(
+            MergeRequestUpdated::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
+    public function testMergeRequestUpdatedAfterApproval()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['labels'] = [
+            [
+                'title' => 'Approved'
+            ]
+        ];
 
         $listener->onMergeRequestUpdated(
             MergeRequestUpdated::fromEvent(MergeRequestEvent::fromJson($json))
