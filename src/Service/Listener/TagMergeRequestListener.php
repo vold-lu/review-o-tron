@@ -50,8 +50,8 @@ class TagMergeRequestListener
     public function onMergeRequestClosed(MergeRequestClosed $event): void
     {
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelUnapproved());
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelRejected() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelRejected());
         }
     }
 
@@ -59,8 +59,8 @@ class TagMergeRequestListener
     public function onMergeRequestRejected(MergeRequestRejected $event): void
     {
         $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelUnapproved() !== null) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelUnapproved());
+        if ($gitlabProject !== null && $gitlabProject->getGitlabLabelRejected() !== null) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelRejected());
         }
     }
 
@@ -72,8 +72,8 @@ class TagMergeRequestListener
             return;
         }
 
-        $unapprovedLabel = $gitlabProject->getGitlabLabelUnapproved();
-        if ($unapprovedLabel === null) {
+        $rejectedLabel = $gitlabProject->getGitlabLabelRejected();
+        if ($rejectedLabel === null) {
             return;
         }
 
@@ -82,9 +82,9 @@ class TagMergeRequestListener
             return;
         }
 
-        // Make sure PR contains unapproved label but comments are resolved now
+        // Make sure PR contains rejected label but comments are resolved now
         $mergeRequestLabels = array_map(fn ($label) => $label['title'], $event->mergeRequest->labels);
-        if (in_array($unapprovedLabel, $mergeRequestLabels) && $event->mergeRequest->blocking_discussions_resolved) {
+        if (in_array($rejectedLabel, $mergeRequestLabels) && $event->mergeRequest->blocking_discussions_resolved) {
             $this->applyLabel($event->project->id, $event->mergeRequest->iid, $openedLabel);
         }
     }

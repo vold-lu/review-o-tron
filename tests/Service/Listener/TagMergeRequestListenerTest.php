@@ -345,7 +345,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelUnapproved('Unapproved');
+        $gitlabProject->setGitlabLabelRejected('Unapproved');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -431,7 +431,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelUnapproved('Unapproved');
+        $gitlabProject->setGitlabLabelRejected('Unapproved');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
         $gitlabProjectRepositoryMock->expects($this->once())
@@ -511,7 +511,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ->method('mergeRequests');
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelUnapproved('Unapproved');
+        $gitlabProject->setGitlabLabelRejected('Unapproved');
         $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
@@ -551,7 +551,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
 
         $gitlabProject = new GitlabProject();
-        $gitlabProject->setGitlabLabelUnapproved('Unapproved');
+        $gitlabProject->setGitlabLabelRejected('Unapproved');
         $gitlabProject->setGitlabLabelOpened('Ready-For-Review');
 
         $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);

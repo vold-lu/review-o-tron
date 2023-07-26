@@ -29,7 +29,7 @@ class GitlabProject
     private ?string $gitlab_label_approved = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $gitlab_label_unapproved = null;
+    private ?string $gitlab_label_rejected = null;
 
     public function getId(): ?int
     {
@@ -96,14 +96,14 @@ class GitlabProject
         return $this;
     }
 
-    public function getGitlabLabelUnapproved(): ?string
+    public function getGitlabLabelRejected(): ?string
     {
-        return $this->gitlab_label_unapproved;
+        return $this->gitlab_label_rejected;
     }
 
-    public function setGitlabLabelUnapproved(?string $gitlab_label_unapproved): static
+    public function setGitlabLabelRejected(?string $gitlab_label_rejected): static
     {
-        $this->gitlab_label_unapproved = $gitlab_label_unapproved;
+        $this->gitlab_label_rejected = $gitlab_label_rejected;
 
         return $this;
     }
