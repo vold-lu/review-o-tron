@@ -32,7 +32,7 @@ class ListRepoCommand extends Command
             $rows []= [
                 $gitlabProject->getId(),
                 $gitlabProject->getGitlabId(),
-                $gitlabProject->getTeamsWebhookUrl(),
+                strlen($gitlabProject->getTeamsWebhookUrl() ?? '') > 45 ? substr($gitlabProject->getTeamsWebhookUrl(), 0, 45) . '...' : $gitlabProject->getTeamsWebhookUrl(),
                 $gitlabProject->getGitlabLabelOpened(),
                 $gitlabProject->getGitlabLabelApproved(),
                 $gitlabProject->getGitlabLabelRejected()
