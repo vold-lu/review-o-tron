@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:list-repo',
+    name: 'repo:ls',
     description: 'List configured Gitlab repository',
 )]
 class ListRepoCommand extends Command

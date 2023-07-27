@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:delete-repo',
+    name: 'repo:rm',
     description: 'Delete configured Gitlab repository',
 )]
 class DeleteRepoCommand extends Command
