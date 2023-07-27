@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'rep:add',
+    name: 'repo:add',
     description: 'Setup a Gitlab repository',
 )]
 class SetupRepoCommand extends Command
