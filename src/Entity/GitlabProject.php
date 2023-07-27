@@ -31,6 +31,17 @@ class GitlabProject
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $gitlab_label_rejected = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $hits = null;
+
+    public function __construct()
+    {
+        $this->hits = 0;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +115,30 @@ class GitlabProject
     public function setGitlabLabelRejected(?string $gitlab_label_rejected): static
     {
         $this->gitlab_label_rejected = $gitlab_label_rejected;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getHits(): ?int
+    {
+        return $this->hits;
+    }
+
+    public function setHits(int $hits): static
+    {
+        $this->hits = $hits;
 
         return $this;
     }

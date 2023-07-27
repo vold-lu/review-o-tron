@@ -31,22 +31,26 @@ class ListRepoCommand extends Command
         foreach ($gitlabProjects as $gitlabProject) {
             $rows []= [
                 $gitlabProject->getId(),
+                $gitlabProject->getName(),
                 $gitlabProject->getGitlabId(),
                 strlen($gitlabProject->getTeamsWebhookUrl() ?? '') > 45 ? substr($gitlabProject->getTeamsWebhookUrl(), 0, 45) . '...' : $gitlabProject->getTeamsWebhookUrl(),
                 $gitlabProject->getGitlabLabelOpened(),
                 $gitlabProject->getGitlabLabelApproved(),
-                $gitlabProject->getGitlabLabelRejected()
+                $gitlabProject->getGitlabLabelRejected(),
+                $gitlabProject->getHits(),
             ];
         }
 
         $io->table(
             [
                 'Internal ID',
+                'Name',
                 'Gitlab ID',
                 'MS Teams Webhook URL',
                 'Opened MR label',
                 'Approved MR label',
-                'Rejected MR label'
+                'Rejected MR label',
+                'Hits'
             ],
             $rows,
         );

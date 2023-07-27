@@ -40,6 +40,9 @@ class SetupRepoCommand extends Command
             $gitlabProject = $previousGitlabProject;
         }
 
+        $gitlabProject->setName(
+            $io->ask('Project display name', $gitlabProject->getName())
+        );
         $gitlabProject->setTeamsWebhookUrl(
             $io->ask('MS Teams Webhook URL', $gitlabProject->getTeamsWebhookUrl())
         );
@@ -56,6 +59,7 @@ class SetupRepoCommand extends Command
         // Display confirmation
         $io->horizontalTable(
             [
+                'Name',
                 'Gitlab ID',
                 'MS Teams Webhook URL',
                 'Opened MR label',
@@ -64,6 +68,7 @@ class SetupRepoCommand extends Command
             ],
             [
                 [
+                    $gitlabProject->getName(),
                     $gitlabProject->getGitlabId(),
                     $gitlabProject->getTeamsWebhookUrl(),
                     $gitlabProject->getGitlabLabelOpened(),
