@@ -37,7 +37,7 @@ class ListRepoCommand extends Command
                 $gitlabProject->getGitlabLabelOpened(),
                 $gitlabProject->getGitlabLabelApproved(),
                 $gitlabProject->getGitlabLabelRejected(),
-                $gitlabProject->getHits(),
+                $gitlabProject->getHits() ?? 0,
             ];
         }
 
