@@ -185,6 +185,11 @@ class RootControllerTest extends WebTestCase
             ->with(42518399)
             ->willReturn($gitlabProject);
 
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($gitlabProject);
+
+        $this->assertEquals(0, $gitlabProject->getHits());
 
         $json = file_get_contents("tests/Fixtures/rejected-merge-request.json");
         $crawler = $client->request('POST', '/', [], [], [
@@ -192,5 +197,7 @@ class RootControllerTest extends WebTestCase
         ], $json);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertEquals(1, $gitlabProject->getHits());
     }
 }

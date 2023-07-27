@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\GitlabProject;
 use App\Params\Event\MergeRequestApproved;
 use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
@@ -38,7 +39,9 @@ class RootController extends AbstractController
         $project = Project::fromJson($data['project']);
 
         // Validate that request is legit
-        $expectedGitlabSecretToken = $this->getExpectedGitlabSecretToken($project);
+        $gitlabProject = $this->projectRepository->findByGitlabId($project->id);
+
+        $expectedGitlabSecretToken = $this->getExpectedGitlabSecretToken($gitlabProject);
         if ($request->headers->get('X-Gitlab-Token') !== $expectedGitlabSecretToken) {
             return new Response(null, Response::HTTP_UNAUTHORIZED);
         }
@@ -53,6 +56,12 @@ class RootController extends AbstractController
                 break;
             default:
                 break;
+        }
+
+        // Increase hits counter
+        if ($gitlabProject !== null) {
+            $gitlabProject->setHits($gitlabProject->getHits() + 1);
+            $this->projectRepository->save($gitlabProject);
         }
 
         return new Response();
@@ -85,9 +94,8 @@ class RootController extends AbstractController
         }
     }
 
-    private function getExpectedGitlabSecretToken(Project $project): string
+    private function getExpectedGitlabSecretToken(?GitlabProject $gitlabProject): string
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($project->id);
         if ($gitlabProject === null) {
             return $this->defaultGitlabSecretToken;
         }
