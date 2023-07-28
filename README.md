@@ -17,3 +17,9 @@ Get notified when a new PR is opened within your projects.
 Get notified when a PR is merged within your projects.
 
 ![img.png](doc/merged-pr.png)
+
+### Auto apply labels based on status
+
+Review'o'tron can automatically apply configurable label based on current PR status. This enables easy filtering.
+
+![img.png](doc/pr-labels.png)
