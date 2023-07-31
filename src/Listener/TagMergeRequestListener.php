@@ -76,8 +76,9 @@ class TagMergeRequestListener
         // Compute list of labels to apply
         $labels = [];
         foreach ($this->labelServices as $labelService) {
-            $labels = $labels + $labelService->getLabels($gitlabProject, $mergeRequest, $eventName);
+            $labels = array_merge($labels, $labelService->getLabels($gitlabProject, $mergeRequest, $eventName));
         }
+        sort($labels);
 
         if (count($labels) === 0) {
             return;
