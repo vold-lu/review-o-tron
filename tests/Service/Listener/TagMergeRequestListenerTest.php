@@ -888,9 +888,11 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         $mergeRequestsMock->expects($this->once())->method('changes')
             ->willReturn([
-                [
-                    'diff' => "\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+"
-                ]
+                'changes' => [
+                    [
+                        'diff' => "\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+"
+                    ]
+                ],
             ]);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(
@@ -933,9 +935,11 @@ class TagMergeRequestListenerTest extends KernelTestCase
 
         $mergeRequestsMock->expects($this->once())->method('changes')
             ->willReturn([
-                [
-                    'diff' => "\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+"
-                ]
+                'changes' => [
+                    [
+                        'diff' => "\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+"
+                    ]
+                ],
             ]);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(

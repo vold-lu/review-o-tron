@@ -38,7 +38,7 @@ class MergeRequestSizeLabelService implements MergeRequestLabelService
         // TODO: improve (deletion would be more easier to read than addition)
 
         $lines = 0;
-        $changes = $this->client->mergeRequests()->changes($projectId, $mergeRequestIid);
+        $changes = $this->client->mergeRequests()->changes($projectId, $mergeRequestIid)['changes'];
 
         foreach ($changes as $change) {
             $diff = $change['diff'];
