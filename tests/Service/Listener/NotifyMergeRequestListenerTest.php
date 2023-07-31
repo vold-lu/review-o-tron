@@ -3,11 +3,11 @@
 namespace App\Tests\Service\Listener;
 
 use App\Entity\GitlabProject;
+use App\Listener\NotifyMergeRequestListener;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Repository\GitlabProjectRepository;
-use App\Service\Listener\NotifyMergeRequestListener;
 use App\Service\MicrosoftTeamsConnector;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

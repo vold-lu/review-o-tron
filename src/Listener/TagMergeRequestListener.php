@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Listener;
+namespace App\Listener;
 
 use App\Params\Event\EventName;
 use App\Params\Event\MergeRequestApproved;

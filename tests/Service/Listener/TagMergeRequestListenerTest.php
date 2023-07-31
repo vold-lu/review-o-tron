@@ -3,6 +3,7 @@
 namespace App\Tests\Service\Listener;
 
 use App\Entity\GitlabProject;
+use App\Listener\TagMergeRequestListener;
 use App\Params\Event\MergeRequestApproved;
 use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
@@ -12,7 +13,6 @@ use App\Params\Event\MergeRequestUpdated;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Params\Gitlab\NoteEvent;
 use App\Repository\GitlabProjectRepository;
-use App\Service\Listener\TagMergeRequestListener;
 use Gitlab\Api\MergeRequests;
 use Gitlab\Client;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
