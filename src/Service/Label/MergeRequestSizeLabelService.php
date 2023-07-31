@@ -42,9 +42,8 @@ class MergeRequestSizeLabelService implements MergeRequestLabelService
 
         foreach ($changes as $change) {
             $diff = $change['diff'];
-
-            $lines += preg_match_all('^\+', $diff);
-            $lines += preg_match_all('^\-', $diff);
+            $lines += preg_match_all('/^\+/m', $diff);
+            $lines += preg_match_all('/^-/m', $diff);
         }
 
         return $lines;
