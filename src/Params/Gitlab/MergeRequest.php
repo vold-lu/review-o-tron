@@ -98,4 +98,12 @@ class MergeRequest
             MergeRequestAction::tryFrom($data['action'] ?? ''),
         );
     }
+
+    /**
+     * @return string[]
+     */
+    public function getLabelTitles(): array
+    {
+        return array_values(array_map(fn($label) => $label['title'], $this->labels));
+    }
 }

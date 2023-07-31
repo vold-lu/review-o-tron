@@ -14,6 +14,8 @@ use App\Params\Gitlab\User;
  */
 class MergeRequestApproved
 {
+    public static EventName $NAME = EventName::APPROVED;
+
     public function __construct(public readonly User         $user,
                                 public readonly Project      $project,
                                 public readonly MergeRequest $mergeRequest,

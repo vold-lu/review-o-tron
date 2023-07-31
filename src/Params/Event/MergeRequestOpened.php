@@ -14,6 +14,8 @@ use App\Params\Gitlab\User;
  */
 class MergeRequestOpened
 {
+    public static EventName $NAME = EventName::OPENED;
+
     public function __construct(public readonly User         $user,
                                 public readonly Project      $project,
                                 public readonly MergeRequest $mergeRequest,

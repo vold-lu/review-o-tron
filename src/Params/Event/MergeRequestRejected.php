@@ -9,6 +9,8 @@ use App\Params\Gitlab\User;
 
 class MergeRequestRejected
 {
+    public static EventName $NAME = EventName::REJECTED;
+
     public function __construct(public readonly User         $user,
                                 public readonly Project      $project,
                                 public readonly MergeRequest $mergeRequest)

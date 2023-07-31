@@ -2,144 +2,91 @@
 
 namespace App\Service\Listener;
 
-use App\Entity\GitlabProject;
+use App\Params\Event\EventName;
 use App\Params\Event\MergeRequestApproved;
 use App\Params\Event\MergeRequestClosed;
 use App\Params\Event\MergeRequestMerged;
 use App\Params\Event\MergeRequestOpened;
 use App\Params\Event\MergeRequestRejected;
 use App\Params\Event\MergeRequestUpdated;
+use App\Params\Gitlab\MergeRequest;
+use App\Params\Gitlab\Project;
 use App\Repository\GitlabProjectRepository;
+use App\Service\Label\MergeRequestLabelService;
+use App\Service\Label\MergeRequestStatusLabelService;
 use Gitlab\Client;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class TagMergeRequestListener
 {
+    /** @var MergeRequestLabelService[] */
+    private readonly array $labelServices;
+
     public function __construct(private readonly Client                  $gitlabClient,
                                 private readonly GitlabProjectRepository $projectRepository)
     {
+        $this->labelServices = [
+            new MergeRequestStatusLabelService(),
+        ];
     }
 
     #[AsEventListener(event: MergeRequestOpened::class)]
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        if ($event->mergeRequest->work_in_progress && $gitlabProject->getGitlabLabelDraft()) {
-            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelDraft());
-        } else {
-            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
-        }
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::OPENED);
     }
 
     #[AsEventListener(event: MergeRequestApproved::class)]
     public function onMergeRequestApproved(MergeRequestApproved $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelApproved());
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::APPROVED);
     }
 
     #[AsEventListener(event: MergeRequestMerged::class)]
     public function onMergeRequestMerged(MergeRequestMerged $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelApproved());
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::MERGED);
     }
 
     #[AsEventListener(event: MergeRequestClosed::class)]
     public function onMergeRequestClosed(MergeRequestClosed $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelRejected());
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::CLOSED);
     }
 
     #[AsEventListener(event: MergeRequestRejected::class)]
     public function onMergeRequestRejected(MergeRequestRejected $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelRejected());
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::REJECTED);
     }
 
     #[AsEventListener(event: MergeRequestUpdated::class)]
     public function onMergeRequestUpdated(MergeRequestUpdated $event): void
     {
-        $gitlabProject = $this->projectRepository->findByGitlabId($event->project->id);
-        if (!$this->isTagFeatureEnabled($gitlabProject)) {
-            return;
-        }
-
-        // Update can allow happens if merge request is ready to be merged, other case are handled by other handlers
-        if (!$event->mergeRequest->blocking_discussions_resolved) {
-            return;
-        }
-
-        // Determinate which label we need to apply on the PR depending on context
-        $labelToApply = $event->mergeRequest->work_in_progress && $gitlabProject->getGitlabLabelDraft() ?
-            $gitlabProject->getGitlabLabelDraft() : $gitlabProject->getGitlabLabelOpened();
-
-        // Extract name of all labels in the PR
-        $mergeRequestLabels = array_map(fn($label) => $label['title'], $event->mergeRequest->labels);
-
-        // Prevent from updating the same tag in loop (settings tags call webhook again)
-        // after onMergeRequestUpdated is run it will be fired again because of tag changes
-        // therefore we need to determinate if the tag who want to apply is the same as current one, if so, discard
-        if (in_array($labelToApply, $mergeRequestLabels)) {
-            return;
-        }
-
-        // Prevent from running if event is triggered from approval request (onMergeRequestMerged)
-        // after onMergeRequestMerged handler is run onMergeRequestUpdated will be fired because of tag changes
-        // therefore we must be able to detect that tag being applied is the approved one, and therefore discard event
-        if (in_array($gitlabProject->getGitlabLabelApproved(), $mergeRequestLabels)) {
-            return;
-        }
-
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $labelToApply);
+        $this->applyLabels($event->project, $event->mergeRequest, EventName::UPDATED);
     }
 
-    /**
-     * Set merge request current label to given one.
-     *
-     * @param int $projectId the id of the gitlab project
-     * @param int $mergeRequestIid the id of the merge request
-     * @param string $label the label to apply
-     * @return void
-     */
-    private function applyLabel(int $projectId, int $mergeRequestIid, string $label): void
+    private function applyLabels(Project $project, MergeRequest $mergeRequest, EventName $eventName): void
     {
-        $this->gitlabClient->mergeRequests()->update($projectId, $mergeRequestIid, ['labels' => $label]);
-    }
+        // Find project configuration
+        $gitlabProject = $this->projectRepository->findByGitlabId($project->id);
 
-    /**
-     * Determinate if tag feature is enabled for given gitlab project
-     *
-     * @param GitlabProject|null $gitlabProject the project to check for
-     * @return bool true if the gitlab project use the tag feature. false otherwise
-     */
-    private function isTagFeatureEnabled(?GitlabProject $gitlabProject): bool
-    {
-        return $gitlabProject !== null &&
-            $gitlabProject->getGitlabLabelOpened() &&
-            $gitlabProject->getGitlabLabelApproved() &&
-            $gitlabProject->getGitlabLabelRejected();
+        // Compute list of labels to apply
+        $labels = [];
+        foreach ($this->labelServices as $labelService) {
+            $labels = $labels + $labelService->getLabels($gitlabProject, $mergeRequest, $eventName);
+        }
+
+        if (count($labels) === 0) {
+            return;
+        }
+
+        // Apply labels (only if not same ones)
+        $mergeRequestLabels = $mergeRequest->getLabelTitles();
+        if ($mergeRequestLabels !== $labels) {
+            $this->gitlabClient->mergeRequests()->update($project->id, $mergeRequest->iid, [
+                'labels' => join(',', $labels)
+            ]);
+        }
     }
 }
