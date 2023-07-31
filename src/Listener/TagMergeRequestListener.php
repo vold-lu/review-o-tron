@@ -13,6 +13,7 @@ use App\Params\Gitlab\MergeRequest;
 use App\Params\Gitlab\Project;
 use App\Repository\GitlabProjectRepository;
 use App\Service\Label\MergeRequestLabelService;
+use App\Service\Label\MergeRequestSizeLabelService;
 use App\Service\Label\MergeRequestStatusLabelService;
 use Gitlab\Client;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -27,6 +28,7 @@ class TagMergeRequestListener
     {
         $this->labelServices = [
             new MergeRequestStatusLabelService(),
+            new MergeRequestSizeLabelService($this->gitlabClient),
         ];
     }
 
