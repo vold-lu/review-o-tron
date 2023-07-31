@@ -107,6 +107,109 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
     }
 
+    public function testDraftMergeRequestOpenedWithEmptyRule()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProject = new GitlabProject();
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['work_in_progress'] = true;
+
+        $listener->onMergeRequestOpened(
+            MergeRequestOpened::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
+    public function testDraftMergeRequestOpenedWithRuleAndNoDraftTag()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+        $gitlabClientMock->expects($this->once())
+            ->method('mergeRequests')
+            ->willReturn($mergeRequestsMock);
+
+        $mergeRequestsMock->expects($this->once())->method('update')->with(
+            42518399, 1, ['labels' => 'Ready-For-Review'],
+        );
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['work_in_progress'] = true;
+
+        $listener->onMergeRequestOpened(
+            MergeRequestOpened::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
+    public function testDraftMergeRequestOpenedWithRuleAndDraftTag()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+        $gitlabClientMock->expects($this->once())
+            ->method('mergeRequests')
+            ->willReturn($mergeRequestsMock);
+
+        $mergeRequestsMock->expects($this->once())->method('update')->with(
+            42518399, 1, ['labels' => 'Draft'],
+        );
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected')
+            ->setGitlabLabelDraft('Draft');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['work_in_progress'] = true;
+
+        $listener->onMergeRequestOpened(
+            MergeRequestOpened::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
     public function testMergeRequestApprovedNoRule()
     {
         self::bootKernel();

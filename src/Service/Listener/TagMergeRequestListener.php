@@ -28,7 +28,11 @@ class TagMergeRequestListener
             return;
         }
 
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
+        if ($event->mergeRequest->work_in_progress && $gitlabProject->getGitlabLabelDraft()) {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelDraft());
+        } else {
+            $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
+        }
     }
 
     #[AsEventListener(event: MergeRequestApproved::class)]
