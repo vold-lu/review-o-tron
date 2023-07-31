@@ -38,6 +38,10 @@ class ListRepoCommand extends Command
                 $gitlabProject->getGitlabLabelDraft(),
                 $gitlabProject->getGitlabLabelApproved(),
                 $gitlabProject->getGitlabLabelRejected(),
+                $gitlabProject->getGitlabLabelSmallChanges(),
+                $gitlabProject->getGitlabLabelMediumChanges(),
+                $gitlabProject->getGitlabLabelLargeChanges(),
+                $gitlabProject->getGitlabLabelExtraLargeChanges(),
                 $gitlabProject->getHits() ?? 0,
             ];
         }
@@ -52,6 +56,10 @@ class ListRepoCommand extends Command
                 'Draft MR label',
                 'Approved MR label',
                 'Rejected MR label',
+                'Small changes label',
+                'Medium changes label',
+                'Large changes label',
+                'Extra large changes label',
                 'Hits'
             ],
             $rows,

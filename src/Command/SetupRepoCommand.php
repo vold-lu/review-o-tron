@@ -58,6 +58,18 @@ class SetupRepoCommand extends Command
         $gitlabProject->setGitlabLabelRejected(
             $io->ask('Name of the label to apply on rejected MR', $gitlabProject->getGitlabLabelRejected())
         );
+        $gitlabProject->setGitlabLabelSmallChanges(
+            $io->ask('Name of the label to apply on small MR', $gitlabProject->getGitlabLabelSmallChanges())
+        );
+        $gitlabProject->setGitlabLabelMediumChanges(
+            $io->ask('Name of the label to apply on medium MR', $gitlabProject->getGitlabLabelMediumChanges())
+        );
+        $gitlabProject->setGitlabLabelLargeChanges(
+            $io->ask('Name of the label to apply on large MR', $gitlabProject->getGitlabLabelLargeChanges())
+        );
+        $gitlabProject->setGitlabLabelExtraLargeChanges(
+            $io->ask('Name of the label to apply on extra large MR', $gitlabProject->getGitlabLabelExtraLargeChanges())
+        );
 
         // Display confirmation
         $io->horizontalTable(
@@ -68,7 +80,11 @@ class SetupRepoCommand extends Command
                 'Opened MR label',
                 'Draft MR label',
                 'Approved MR label',
-                'Rejected MR label'
+                'Rejected MR label',
+                'Small changes label',
+                'Medium changes label',
+                'Large changes label',
+                'Extra large changes label',
             ],
             [
                 [
@@ -78,7 +94,11 @@ class SetupRepoCommand extends Command
                     $gitlabProject->getGitlabLabelOpened(),
                     $gitlabProject->getGitlabLabelDraft(),
                     $gitlabProject->getGitlabLabelApproved(),
-                    $gitlabProject->getGitlabLabelRejected()
+                    $gitlabProject->getGitlabLabelRejected(),
+                    $gitlabProject->getGitlabLabelSmallChanges(),
+                    $gitlabProject->getGitlabLabelMediumChanges(),
+                    $gitlabProject->getGitlabLabelLargeChanges(),
+                    $gitlabProject->getGitlabLabelExtraLargeChanges(),
                 ]
             ]
         );

@@ -37,6 +37,18 @@ class GitlabProject
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_small_changes = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_medium_changes = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_large_changes = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_extra_large_changes = null;
+
     #[ORM\Column(nullable: true)]
     private ?int $hits = null;
 
@@ -142,6 +154,54 @@ class GitlabProject
     public function setName(?string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getGitlabLabelSmallChanges(): ?string
+    {
+        return $this->gitlab_label_small_changes;
+    }
+
+    public function setGitlabLabelSmallChanges(?string $gitlab_label_small_changes): static
+    {
+        $this->gitlab_label_small_changes = $gitlab_label_small_changes;
+
+        return $this;
+    }
+
+    public function getGitlabLabelMediumChanges(): ?string
+    {
+        return $this->gitlab_label_medium_changes;
+    }
+
+    public function setGitlabLabelMediumChanges(?string $gitlab_label_medium_changes): static
+    {
+        $this->gitlab_label_medium_changes = $gitlab_label_medium_changes;
+
+        return $this;
+    }
+
+    public function getGitlabLabelLargeChanges(): ?string
+    {
+        return $this->gitlab_label_large_changes;
+    }
+
+    public function setGitlabLabelLargeChanges(?string $gitlab_label_large_changes): static
+    {
+        $this->gitlab_label_large_changes = $gitlab_label_large_changes;
+
+        return $this;
+    }
+
+    public function getGitlabLabelExtraLargeChanges(): ?string
+    {
+        return $this->gitlab_label_extra_large_changes;
+    }
+
+    public function setGitlabLabelExtraLargeChanges(?string $gitlab_label_extra_large_changes): static
+    {
+        $this->gitlab_label_extra_large_changes = $gitlab_label_extra_large_changes;
 
         return $this;
     }
