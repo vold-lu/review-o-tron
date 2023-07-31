@@ -92,11 +92,17 @@ class TagMergeRequestListener
             return;
         }
 
+        // Determinate which label we need to apply on the PR depending on context
+        $labelToApply = $event->mergeRequest->work_in_progress && $gitlabProject->getGitlabLabelDraft() ?
+            $gitlabProject->getGitlabLabelDraft() : $gitlabProject->getGitlabLabelOpened();
+
+        // Extract name of all labels in the PR
+        $mergeRequestLabels = array_map(fn($label) => $label['title'], $event->mergeRequest->labels);
+
         // Prevent from updating the same tag in loop (settings tags call webhook again)
         // after onMergeRequestUpdated is run it will be fired again because of tag changes
         // therefore we need to determinate if the tag who want to apply is the same as current one, if so, discard
-        $mergeRequestLabels = array_map(fn($label) => $label['title'], $event->mergeRequest->labels);
-        if (in_array($gitlabProject->getGitlabLabelOpened(), $mergeRequestLabels)) {
+        if (in_array($labelToApply, $mergeRequestLabels)) {
             return;
         }
 
@@ -107,7 +113,7 @@ class TagMergeRequestListener
             return;
         }
 
-        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $gitlabProject->getGitlabLabelOpened());
+        $this->applyLabel($event->project->id, $event->mergeRequest->iid, $labelToApply);
     }
 
     /**
