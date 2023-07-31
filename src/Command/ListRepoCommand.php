@@ -35,6 +35,7 @@ class ListRepoCommand extends Command
                 $gitlabProject->getGitlabId(),
                 strlen($gitlabProject->getTeamsWebhookUrl() ?? '') > 45 ? substr($gitlabProject->getTeamsWebhookUrl(), 0, 45) . '...' : $gitlabProject->getTeamsWebhookUrl(),
                 $gitlabProject->getGitlabLabelOpened(),
+                $gitlabProject->getGitlabLabelDraft(),
                 $gitlabProject->getGitlabLabelApproved(),
                 $gitlabProject->getGitlabLabelRejected(),
                 $gitlabProject->getHits() ?? 0,
@@ -48,6 +49,7 @@ class ListRepoCommand extends Command
                 'Gitlab ID',
                 'MS Teams Webhook URL',
                 'Opened MR label',
+                'Draft MR label',
                 'Approved MR label',
                 'Rejected MR label',
                 'Hits'

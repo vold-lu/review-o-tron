@@ -49,6 +49,9 @@ class SetupRepoCommand extends Command
         $gitlabProject->setGitlabLabelOpened(
             $io->ask('Name of the label to apply on opened MR', $gitlabProject->getGitlabLabelOpened())
         );
+        $gitlabProject->setGitlabLabelDraft(
+            $io->ask('Name of the label to apply on draft MR', $gitlabProject->getGitlabLabelDraft())
+        );
         $gitlabProject->setGitlabLabelApproved(
             $io->ask('Name of the label to apply on approved MR', $gitlabProject->getGitlabLabelApproved())
         );
@@ -63,6 +66,7 @@ class SetupRepoCommand extends Command
                 'Gitlab ID',
                 'MS Teams Webhook URL',
                 'Opened MR label',
+                'Draft MR label',
                 'Approved MR label',
                 'Rejected MR label'
             ],
@@ -72,6 +76,7 @@ class SetupRepoCommand extends Command
                     $gitlabProject->getGitlabId(),
                     $gitlabProject->getTeamsWebhookUrl(),
                     $gitlabProject->getGitlabLabelOpened(),
+                    $gitlabProject->getGitlabLabelDraft(),
                     $gitlabProject->getGitlabLabelApproved(),
                     $gitlabProject->getGitlabLabelRejected()
                 ]
