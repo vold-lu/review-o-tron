@@ -30,6 +30,6 @@ jobs:
       run: |
         mkdir -p var
         ./bin/console doctrine:database:create --env=test
-        ./bin/console console doctrine:schema:update --env=test --force
+        ./bin/console doctrine:schema:update --env=test --force
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       run: ./bin/phpunit
