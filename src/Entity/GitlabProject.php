@@ -32,6 +32,9 @@ class GitlabProject
     private ?string $gitlab_label_rejected = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    private ?string $gitlab_label_draft = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 
     #[ORM\Column(nullable: true)]
@@ -115,6 +118,18 @@ class GitlabProject
     public function setGitlabLabelRejected(?string $gitlab_label_rejected): static
     {
         $this->gitlab_label_rejected = $gitlab_label_rejected;
+
+        return $this;
+    }
+
+    public function getGitlabLabelDraft(): ?string
+    {
+        return $this->gitlab_label_draft;
+    }
+
+    public function setGitlabLabelDraft(?string $gitlab_label_draft): static
+    {
+        $this->gitlab_label_draft = $gitlab_label_draft;
 
         return $this;
     }
