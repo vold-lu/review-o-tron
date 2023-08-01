@@ -614,7 +614,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
     }
 
-    public function testMergeRequestRUpdatedWithRuleAlreadyOpened()
+    public function testMergeRequestUpdatedWithRuleAlreadyOpened()
     {
         self::bootKernel();
 
@@ -650,7 +650,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
     }
 
-    public function testMergeRequestRUpdatedWithRuleNotOpened()
+    public function testMergeRequestUpdatedWithRuleNotOpened()
     {
         self::bootKernel();
 
@@ -749,6 +749,62 @@ class TagMergeRequestListenerTest extends KernelTestCase
         $json['object_attributes']['labels'] = [
             [
                 'title' => 'Approved'
+            ]
+        ];
+
+        $listener->onMergeRequestUpdated(
+            MergeRequestUpdated::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
+    public function testMergeRequestUpdatedAfterApprovalWithSizeLabels()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+        $gitlabClientMock->expects($this->exactly(1))
+            ->method('mergeRequests')
+            ->willReturn($mergeRequestsMock);
+
+        $mergeRequestsMock->expects($this->once())->method('changes')
+            ->willReturn([
+                'changes' => [
+                    [
+                        'diff' => "\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+\n+"
+                    ]
+                ],
+            ]);
+
+        $mergeRequestsMock->expects($this->never())->method('update');
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabId(42)
+            ->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected')
+            ->setGitlabLabelSmallChanges('Size|S')
+            ->setGitlabLabelMediumChanges('Size|M')
+            ->setGitlabLabelLargeChanges('Size|L')
+            ->setGitlabLabelExtraLargeChanges('Size|XL');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/updated-merge-request.json"), true);
+        $json['object_attributes']['labels'] = [
+            [
+                'title' => 'Approved'
+            ],
+            [
+                'title' => 'Size|M'
             ]
         ];
 

@@ -64,7 +64,7 @@ class MergeRequestStatusLabelService implements MergeRequestLabelService
         // therefore we must be able to detect that tag being applied is the approved one, and therefore discard event
         $mergeRequestLabels = $mergeRequest->getLabelTitles();
         if (in_array($gitlabProject->getGitlabLabelApproved(), $mergeRequestLabels)) {
-            return '';
+            return $gitlabProject->getGitlabLabelApproved();
         }
 
         // Determinate which label we need to apply on the PR depending on context
