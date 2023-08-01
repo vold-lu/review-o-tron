@@ -804,7 +804,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
                 'title' => 'Approved'
             ],
             [
-                'title' => 'Size|M'
+                'title' => 'Size|S'
             ]
         ];
 
@@ -952,7 +952,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ]);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(
-            42518399, 1, ['labels' => 'Size|M'],
+            42518399, 1, ['labels' => 'Size|S'],
         );
 
         $gitlabProject = new GitlabProject();
@@ -999,7 +999,7 @@ class TagMergeRequestListenerTest extends KernelTestCase
             ]);
 
         $mergeRequestsMock->expects($this->once())->method('update')->with(
-            42518399, 1, ['labels' => 'Ready-For-Review,Size|M'],
+            42518399, 1, ['labels' => 'Ready-For-Review,Size|S'],
         );
 
         $gitlabProject = new GitlabProject();

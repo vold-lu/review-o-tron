@@ -20,13 +20,13 @@ class MergeRequestSizeLabelService implements MergeRequestLabelService
         }
 
         $changedLines = $this->countMergeRequestChangedLines($gitlabProject->getGitlabId(), $mergeRequest->iid);
-        if ($changedLines < 30) {
+        if ($changedLines < 60) {
             return [$gitlabProject->getGitlabLabelSmallChanges()];
         }
-        if ($changedLines < 60) {
+        if ($changedLines < 120) {
             return [$gitlabProject->getGitlabLabelMediumChanges()];
         }
-        if ($changedLines < 120) {
+        if ($changedLines < 240) {
             return [$gitlabProject->getGitlabLabelLargeChanges()];
         }
 
