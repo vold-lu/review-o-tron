@@ -54,9 +54,9 @@ class MergeRequestStatusLabelService implements MergeRequestLabelService
 
     private function handleMergeRequestUpdated(GitlabProject $gitlabProject, MergeRequest $mergeRequest): string
     {
-        // Update can allow happens if merge request is ready to be merged, other case are handled by other handlers
+        // Merge request comments are not all resolved
         if (!$mergeRequest->blocking_discussions_resolved) {
-            return '';
+            return $gitlabProject->getGitlabLabelRejected();
         }
 
         // Prevent from running if event is triggered from approval request (onMergeRequestMerged)

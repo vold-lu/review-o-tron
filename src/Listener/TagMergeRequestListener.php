@@ -85,8 +85,8 @@ class TagMergeRequestListener
         }
 
         // Apply labels (only if not same ones)
-        $mergeRequestLabels = $mergeRequest->getLabelTitles();
-        if ($mergeRequestLabels !== $labels) {
+        $actualLabels = $mergeRequest->getLabelTitles();
+        if ($actualLabels !== $labels) {
             $this->gitlabClient->mergeRequests()->update($project->id, $mergeRequest->iid, [
                 'labels' => join(',', $labels)
             ]);
