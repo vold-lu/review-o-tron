@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Listener;
+namespace App\Listener\MergeRequest;
 
-use App\Params\Event\MergeRequestMerged;
-use App\Params\Event\MergeRequestOpened;
+use App\Params\Event\MergeRequest\MergeRequestMerged;
+use App\Params\Event\MergeRequest\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequest;
 use App\Params\Gitlab\Project;
 use App\Repository\GitlabProjectRepository;

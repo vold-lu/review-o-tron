@@ -3,7 +3,7 @@
 namespace App\Service\Label;
 
 use App\Entity\GitlabProject;
-use App\Params\Event\EventName;
+use App\Params\Event\MergeRequest\MergeRequestEventName;
 use App\Params\Gitlab\MergeRequest;
 
 interface MergeRequestLabelService
@@ -11,8 +11,8 @@ interface MergeRequestLabelService
     /**
      * @param GitlabProject|null $gitlabProject
      * @param MergeRequest $mergeRequest
-     * @param EventName $eventName
+     * @param MergeRequestEventName $eventName
      * @return string[]
      */
-    public function getLabels(GitlabProject|null $gitlabProject, MergeRequest $mergeRequest, EventName $eventName): array;
+    public function getLabels(GitlabProject|null $gitlabProject, MergeRequest $mergeRequest, MergeRequestEventName $eventName): array;
 }

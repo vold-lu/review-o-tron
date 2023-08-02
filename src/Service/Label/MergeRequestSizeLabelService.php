@@ -3,7 +3,7 @@
 namespace App\Service\Label;
 
 use App\Entity\GitlabProject;
-use App\Params\Event\EventName;
+use App\Params\Event\MergeRequest\MergeRequestEventName;
 use App\Params\Gitlab\MergeRequest;
 use Gitlab\Client;
 
@@ -13,7 +13,7 @@ class MergeRequestSizeLabelService implements MergeRequestLabelService
     {
     }
 
-    public function getLabels(?GitlabProject $gitlabProject, MergeRequest $mergeRequest, EventName $eventName): array
+    public function getLabels(?GitlabProject $gitlabProject, MergeRequest $mergeRequest, MergeRequestEventName $eventName): array
     {
         if (!$this->isSizeFeatureEnabled($gitlabProject)) {
             return [];

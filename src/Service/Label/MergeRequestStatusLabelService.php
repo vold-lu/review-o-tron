@@ -3,24 +3,24 @@
 namespace App\Service\Label;
 
 use App\Entity\GitlabProject;
-use App\Params\Event\EventName;
+use App\Params\Event\MergeRequest\MergeRequestEventName;
 use App\Params\Gitlab\MergeRequest;
 
 class MergeRequestStatusLabelService implements MergeRequestLabelService
 {
-    public function getLabels(GitlabProject|null $gitlabProject, MergeRequest $mergeRequest, EventName $eventName): array
+    public function getLabels(GitlabProject|null $gitlabProject, MergeRequest $mergeRequest, MergeRequestEventName $eventName): array
     {
         if (!$this->isTagFeatureEnabled($gitlabProject)) {
             return [];
         }
 
         $label = match ($eventName) {
-            EventName::APPROVED => $this->handleMergeRequestApproved($gitlabProject, $mergeRequest),
-            EventName::CLOSED => $this->handleMergeRequestClosed($gitlabProject, $mergeRequest),
-            EventName::MERGED => $this->handleMergeRequestMerged($gitlabProject, $mergeRequest),
-            EventName::OPENED => $this->handleMergeRequestOpened($gitlabProject, $mergeRequest),
-            EventName::REJECTED => $this->handleMergeRequestRejected($gitlabProject, $mergeRequest),
-            EventName::UPDATED => $this->handleMergeRequestUpdated($gitlabProject, $mergeRequest),
+            MergeRequestEventName::APPROVED => $this->handleMergeRequestApproved($gitlabProject, $mergeRequest),
+            MergeRequestEventName::CLOSED => $this->handleMergeRequestClosed($gitlabProject, $mergeRequest),
+            MergeRequestEventName::MERGED => $this->handleMergeRequestMerged($gitlabProject, $mergeRequest),
+            MergeRequestEventName::OPENED => $this->handleMergeRequestOpened($gitlabProject, $mergeRequest),
+            MergeRequestEventName::REJECTED => $this->handleMergeRequestRejected($gitlabProject, $mergeRequest),
+            MergeRequestEventName::UPDATED => $this->handleMergeRequestUpdated($gitlabProject, $mergeRequest),
         };
 
         return !empty($label) ? [$label] : [];

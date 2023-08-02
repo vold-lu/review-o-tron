@@ -3,13 +3,13 @@
 namespace App\Tests\Service\Listener;
 
 use App\Entity\GitlabProject;
-use App\Listener\TagMergeRequestListener;
-use App\Params\Event\MergeRequestApproved;
-use App\Params\Event\MergeRequestClosed;
-use App\Params\Event\MergeRequestMerged;
-use App\Params\Event\MergeRequestOpened;
-use App\Params\Event\MergeRequestRejected;
-use App\Params\Event\MergeRequestUpdated;
+use App\Listener\MergeRequest\TagMergeRequestListener;
+use App\Params\Event\MergeRequest\MergeRequestApproved;
+use App\Params\Event\MergeRequest\MergeRequestClosed;
+use App\Params\Event\MergeRequest\MergeRequestMerged;
+use App\Params\Event\MergeRequest\MergeRequestOpened;
+use App\Params\Event\MergeRequest\MergeRequestRejected;
+use App\Params\Event\MergeRequest\MergeRequestUpdated;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Params\Gitlab\NoteEvent;
 use App\Repository\GitlabProjectRepository;

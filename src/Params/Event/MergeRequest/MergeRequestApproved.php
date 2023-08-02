@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Params\Event;
+namespace App\Params\Event\MergeRequest;
 
 use App\Params\Gitlab\MergeRequest;
 use App\Params\Gitlab\MergeRequestEvent;
@@ -12,9 +12,9 @@ use App\Params\Gitlab\User;
  * @property User[] $assignees
  * @property User[] $reviewers
  */
-class MergeRequestClosed
+class MergeRequestApproved
 {
-    public static EventName $NAME = EventName::CLOSED;
+    public static MergeRequestEventName $NAME = MergeRequestEventName::APPROVED;
 
     public function __construct(public readonly User         $user,
                                 public readonly Project      $project,

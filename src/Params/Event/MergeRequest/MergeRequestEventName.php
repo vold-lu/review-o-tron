@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Params\Event;
+namespace App\Params\Event\MergeRequest;
 
-enum EventName: string
+enum MergeRequestEventName: string
 {
     case APPROVED = 'approved';
     case CLOSED = 'closed';

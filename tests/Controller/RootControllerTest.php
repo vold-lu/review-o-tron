@@ -3,8 +3,8 @@
 namespace App\Tests\Controller;
 
 use App\Entity\GitlabProject;
-use App\Listener\NotifyMergeRequestListener;
-use App\Listener\TagMergeRequestListener;
+use App\Listener\MergeRequest\NotifyMergeRequestListener;
+use App\Listener\MergeRequest\TagMergeRequestListener;
 use App\Repository\GitlabProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;

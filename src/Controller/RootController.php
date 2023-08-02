@@ -3,16 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\GitlabProject;
-use App\Params\Event\MergeRequestApproved;
-use App\Params\Event\MergeRequestClosed;
-use App\Params\Event\MergeRequestMerged;
-use App\Params\Event\MergeRequestOpened;
-use App\Params\Event\MergeRequestRejected;
-use App\Params\Event\MergeRequestUpdated;
+use App\Params\Event\MergeRequest\MergeRequestApproved;
+use App\Params\Event\MergeRequest\MergeRequestClosed;
+use App\Params\Event\MergeRequest\MergeRequestMerged;
+use App\Params\Event\MergeRequest\MergeRequestOpened;
+use App\Params\Event\MergeRequest\MergeRequestRejected;
+use App\Params\Event\MergeRequest\MergeRequestUpdated;
+use App\Params\Event\Release\ReleaseCreated;
 use App\Params\Gitlab\MergeRequestAction;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Params\Gitlab\NoteEvent;
 use App\Params\Gitlab\Project;
+use App\Params\Gitlab\ReleaseAction;
+use App\Params\Gitlab\ReleaseEvent;
 use App\Repository\GitlabProjectRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -54,6 +57,9 @@ class RootController extends AbstractController
             case 'note':
                 $this->resolveNoteEvent($data);
                 break;
+            case 'release':
+                $this->resolveReleaseEvent($data);
+                break;
             default:
                 break;
         }
@@ -92,6 +98,22 @@ class RootController extends AbstractController
         if (!$noteEvent->merge_request->blocking_discussions_resolved) {
             $this->eventDispatcher->dispatch(MergeRequestRejected::fromEvent($noteEvent));
         }
+    }
+
+    private function resolveReleaseEvent(array $data): void
+    {
+        $releaseEvent = ReleaseEvent::fromJson($data);
+
+        // Handle webhook events
+        $event = match ($releaseEvent->action) {
+            ReleaseAction::CREATE => ReleaseCreated::fromEvent($releaseEvent),
+            default => null,
+        };
+
+        if ($event !== null) {
+            $this->eventDispatcher->dispatch($event);
+        }
+
     }
 
     private function getExpectedGitlabSecretToken(?GitlabProject $gitlabProject): string

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Listener;
+namespace App\Listener\MergeRequest;
 
-use App\Params\Event\EventName;
-use App\Params\Event\MergeRequestApproved;
-use App\Params\Event\MergeRequestClosed;
-use App\Params\Event\MergeRequestMerged;
-use App\Params\Event\MergeRequestOpened;
-use App\Params\Event\MergeRequestRejected;
-use App\Params\Event\MergeRequestUpdated;
+use App\Params\Event\MergeRequest\MergeRequestApproved;
+use App\Params\Event\MergeRequest\MergeRequestClosed;
+use App\Params\Event\MergeRequest\MergeRequestEventName;
+use App\Params\Event\MergeRequest\MergeRequestMerged;
+use App\Params\Event\MergeRequest\MergeRequestOpened;
+use App\Params\Event\MergeRequest\MergeRequestRejected;
+use App\Params\Event\MergeRequest\MergeRequestUpdated;
 use App\Params\Gitlab\MergeRequest;
 use App\Params\Gitlab\Project;
 use App\Repository\GitlabProjectRepository;
@@ -35,40 +35,40 @@ class TagMergeRequestListener
     #[AsEventListener(event: MergeRequestOpened::class)]
     public function onMergeRequestOpened(MergeRequestOpened $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::OPENED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::OPENED);
     }
 
     #[AsEventListener(event: MergeRequestApproved::class)]
     public function onMergeRequestApproved(MergeRequestApproved $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::APPROVED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::APPROVED);
     }
 
     #[AsEventListener(event: MergeRequestMerged::class)]
     public function onMergeRequestMerged(MergeRequestMerged $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::MERGED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::MERGED);
     }
 
     #[AsEventListener(event: MergeRequestClosed::class)]
     public function onMergeRequestClosed(MergeRequestClosed $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::CLOSED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::CLOSED);
     }
 
     #[AsEventListener(event: MergeRequestRejected::class)]
     public function onMergeRequestRejected(MergeRequestRejected $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::REJECTED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::REJECTED);
     }
 
     #[AsEventListener(event: MergeRequestUpdated::class)]
     public function onMergeRequestUpdated(MergeRequestUpdated $event): void
     {
-        $this->applyLabels($event->project, $event->mergeRequest, EventName::UPDATED);
+        $this->applyLabels($event->project, $event->mergeRequest, MergeRequestEventName::UPDATED);
     }
 
-    private function applyLabels(Project $project, MergeRequest $mergeRequest, EventName $eventName): void
+    private function applyLabels(Project $project, MergeRequest $mergeRequest, MergeRequestEventName $eventName): void
     {
         // Find project configuration
         $gitlabProject = $this->projectRepository->findByGitlabId($project->id);

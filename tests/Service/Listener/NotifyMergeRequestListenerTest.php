@@ -3,9 +3,9 @@
 namespace App\Tests\Service\Listener;
 
 use App\Entity\GitlabProject;
-use App\Listener\NotifyMergeRequestListener;
-use App\Params\Event\MergeRequestMerged;
-use App\Params\Event\MergeRequestOpened;
+use App\Listener\MergeRequest\NotifyMergeRequestListener;
+use App\Params\Event\MergeRequest\MergeRequestMerged;
+use App\Params\Event\MergeRequest\MergeRequestOpened;
 use App\Params\Gitlab\MergeRequestEvent;
 use App\Repository\GitlabProjectRepository;
 use App\Service\MicrosoftTeamsConnector;
