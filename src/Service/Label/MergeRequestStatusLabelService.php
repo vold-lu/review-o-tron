@@ -28,6 +28,11 @@ class MergeRequestStatusLabelService implements MergeRequestLabelService
 
     private function handleMergeRequestApproved(GitlabProject $gitlabProject, MergeRequest $mergeRequest): string
     {
+        // Merge request comments are not all resolved
+        if (!$mergeRequest->blocking_discussions_resolved) {
+            return $gitlabProject->getGitlabLabelRejected();
+        }
+
         return $gitlabProject->getGitlabLabelApproved();
     }
 

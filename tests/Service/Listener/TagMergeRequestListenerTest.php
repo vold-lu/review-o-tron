@@ -298,6 +298,43 @@ class TagMergeRequestListenerTest extends KernelTestCase
         );
     }
 
+    public function testMergeRequestApprovedWithRuleButAlreadyRejected()
+    {
+        self::bootKernel();
+
+        // Mock dependencies
+        $gitlabClientMock = $this->createMock(Client::class);
+        $mergeRequestsMock = $this->createMock(MergeRequests::class);
+        $gitlabClientMock->expects($this->never())
+            ->method('mergeRequests');
+
+        $gitlabProject = new GitlabProject();
+        $gitlabProject->setGitlabLabelOpened('Ready-For-Review')
+            ->setGitlabLabelApproved('Approved')
+            ->setGitlabLabelRejected('Rejected');
+
+        $gitlabProjectRepositoryMock = $this->createMock(GitlabProjectRepository::class);
+        $gitlabProjectRepositoryMock->expects($this->once())
+            ->method('findByGitlabId')
+            ->with(42518399)
+            ->willReturn($gitlabProject);
+
+        // Run actual test
+        $listener = new TagMergeRequestListener($gitlabClientMock, $gitlabProjectRepositoryMock);
+
+        $json = json_decode(file_get_contents("tests/Fixtures/approved-merge-request.json"), true);
+        $json['object_attributes']['blocking_discussions_resolved'] = false;
+        $json['object_attributes']['labels'] = [
+            [
+                'title' => 'Rejected'
+            ],
+        ];
+
+        $listener->onMergeRequestApproved(
+            MergeRequestApproved::fromEvent(MergeRequestEvent::fromJson($json))
+        );
+    }
+
     public function testMergeRequestMergedNoRule()
     {
         self::bootKernel();
