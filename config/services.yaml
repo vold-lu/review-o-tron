@@ -32,12 +32,13 @@ services:
         arguments:
             $defaultGitlabSecretToken: '%app.gitlab_secret_token%'
 
-    # Ignore NotFoundHttpException (404 not found) exception
+    # Ignore "expected" exception to prevent Sentry flooding
     Sentry\Integration\IgnoreErrorsIntegration:
         arguments:
             $options:
                 ignore_exceptions:
                     - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+                    - Symfony\Component\HttpKernel\Exception\BadRequestHttpException
 
 zeichen32_git_lab_api:
     clients:
