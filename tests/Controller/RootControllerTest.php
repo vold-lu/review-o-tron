@@ -200,4 +200,29 @@ class RootControllerTest extends WebTestCase
 
         $this->assertEquals(1, $gitlabProject->getHits());
     }
+
+    public function testRequestWithNoReviewersSet(): void
+    {
+        $client = static::createClient();
+
+        // Mock dependencies
+        $notifyMergeRequestListenerMock = $this->createMock(NotifyMergeRequestListener::class);
+        $tagMergeRequestListenerMock = $this->createMock(TagMergeRequestListener::class);
+
+        $this->getContainer()->set(NotifyMergeRequestListener::class, $notifyMergeRequestListenerMock);
+        $this->getContainer()->set(TagMergeRequestListener::class, $tagMergeRequestListenerMock);
+
+        // Mock existing override
+        $notifyMergeRequestListenerMock->expects($this->once())->method('onMergeRequestOpened');
+        $tagMergeRequestListenerMock->expects($this->once())->method('onMergeRequestOpened');
+
+        $json = json_decode(file_get_contents("tests/Fixtures/new-merge-request.json"), true);
+        unset($json['reviewers']);
+
+        $crawler = $client->jsonRequest('POST', '/', $json, [
+            'HTTP_X_GITLAB_TOKEN' => 'test',
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }

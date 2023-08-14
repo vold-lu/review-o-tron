@@ -32,8 +32,8 @@ class MergeRequestEvent
             $data['labels'],
             $data['changes'],
             Repository::fromJson($data['repository']),
-            array_map(fn($user) => User::fromJson($user), $data['assignees']),
-            array_map(fn($user) => User::fromJson($user), $data['reviewers'])
+            array_map(fn($user) => User::fromJson($user), $data['assignees'] ?? []),
+            array_map(fn($user) => User::fromJson($user), $data['reviewers'] ?? [])
         );
     }
 }
