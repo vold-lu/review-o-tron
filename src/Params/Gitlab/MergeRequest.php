@@ -4,7 +4,7 @@ namespace App\Params\Gitlab;
 
 class MergeRequest
 {
-    public function __construct(public readonly int                     $assignee_id,
+    public function __construct(public readonly ?int                    $assignee_id,
                                 public readonly int                     $author_id,
                                 public readonly string                  $created_at,
                                 public readonly string                  $description,
