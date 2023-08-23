@@ -45,7 +45,7 @@ class MergeRequest
                                 public readonly string                  $state,
                                 public readonly bool                    $blocking_discussions_resolved,
                                 public readonly bool                    $first_contribution,
-                                public readonly string                  $detailed_merge_status,
+                                public readonly MergeRequestStatus      $detailed_merge_status,
                                 public readonly MergeRequestAction|null $action)
     {
     }
@@ -94,7 +94,7 @@ class MergeRequest
             $data['state'],
             $data['blocking_discussions_resolved'],
             $data['first_contribution'],
-            $data['detailed_merge_status'],
+            MergeRequestStatus::from($data['detailed_merge_status']),
             MergeRequestAction::tryFrom($data['action'] ?? ''),
         );
     }
