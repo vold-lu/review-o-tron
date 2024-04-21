@@ -67,6 +67,12 @@ class RootController extends AbstractController
         return new Response();
     }
 
+    #[Route('/ping', name: 'ping')]
+    public function ping(): Response
+    {
+        return new Response('ok');
+    }
+
     private function resolveMergeRequestEvent(array $data): void
     {
         $mergeRequestEvent = MergeRequestEvent::fromJson($data);

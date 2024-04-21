@@ -251,4 +251,13 @@ class RootControllerTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
+
+    public function testPingEndpoint(): void
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('OPTIONS', '/ping');
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
 }
